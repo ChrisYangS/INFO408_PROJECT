@@ -1,5 +1,5 @@
 $procedure$;
-CREATE OR REPLACE PROCEDURE yansh877.update_stay_stats() LANGUAGE plpgsql AS $procedure$
+CREATE OR REPLACE PROCEDURE update_stay_stats() LANGUAGE plpgsql AS $procedure$
 DECLARE rows_affected INT;
 BEGIN BEGIN -- Your original SQL code here
 UPDATE nz_listings_stay_stats

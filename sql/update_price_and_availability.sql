@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE yansh877.update_price_and_availability() LANGUAGE plpgsql AS $procedure$
+CREATE OR REPLACE PROCEDURE update_price_and_availability() LANGUAGE plpgsql AS $procedure$
 DECLARE rows_affected INT;
 BEGIN BEGIN -- Your original SQL code here
 UPDATE nz_listings_stay_stats

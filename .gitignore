@@ -4,5 +4,5 @@ config.*
 # ignore ALL PDF documents
 *.pdf
 
-# ignore ALL files in ANY directory named data
-data/
+# ignore ALL csv data files in the data folder
+data/*.csv
