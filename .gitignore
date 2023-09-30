@@ -1,0 +1,8 @@
+# ignore ALL config. files
+config.*
+
+# ignore ALL PDF documents
+*.pdf
+
+# ignore ALL files in ANY directory named data
+data/
