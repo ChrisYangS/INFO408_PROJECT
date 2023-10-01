@@ -1,7 +1,5 @@
 # INFO 408 Assignment 2 Project
 
-Revised Document Introduction:
-
 This document offers an overview of the New Zealand Airbnb data migration
 project, providing essential technical guidance on the following aspects:
 
@@ -67,6 +65,76 @@ structure. Here are the key aspects of this project:
     - When users or customers perform queries through the BI interface, the
       system recalculates and updates the aggregated data in real-time, ensuring
       that the insights provided are current and accurate.
+
+In addition to the key aspects of the data migration project described, there
+are specific requirements for the new system, considering high-efficiency data
+analytics, data normalization to avoid data duplications, and high performance
+on both read and write data operations. These requirements are essential for the
+success of the project:
+
+1. **High-Efficiency Data Analytics, Especially for Performing Aggregations**:
+
+    - The new system should be optimized for data analytics tasks, especially
+      when performing aggregations on large datasets.
+    - It should support efficient grouping, filtering, and summarization of data
+      to enable complex analytical queries.
+    - Utilizing features like indexing, query optimization, and parallel
+      processing can significantly enhance data analytics performance.
+
+2. **Data Normalization to Avoid Data Duplications**:
+
+    - Data normalization is a key requirement to ensure efficient data storage
+      and integrity.
+    - Redundant data should be minimized or eliminated through proper table
+      design, relationships, and normalization techniques.
+    - Normalized data structures enhance data consistency, reduce storage costs,
+      and simplify data maintenance.
+
+3. **High Performance on Read and Write Data Operations**:
+
+    - The new system should be capable of handling high volumes of both read and
+      write operations efficiently.
+    - Write operations, such as data ingestion and updates, should be optimized
+      to minimize latency and ensure real-time data availability.
+    - Read operations, including data retrieval and analytics queries, should be
+      executed with minimal response times to support timely decision-making.
+    - Caching mechanisms, partitioning strategies, and load balancing can
+      contribute to achieving high-performance data access.
+
+4. **Scalability and Elasticity**:
+
+    - The system should be designed to scale horizontally and vertically to
+      accommodate growing data volumes and increasing user loads.
+    - Elasticity features, such as automatic resource provisioning and scaling,
+      can ensure optimal performance during peak usage periods.
+
+5. **Data Quality and Integrity**:
+
+    - Data quality checks and validation processes should be integrated into
+      data pipelines to maintain data integrity.
+    - Implementing data quality rules and constraints can help prevent
+      inaccurate or incomplete data from being stored in the database.
+
+6. **Security and Access Control**:
+
+    - Robust security measures, including authentication, authorization, and
+      encryption, should be in place to protect sensitive data.
+    - Access control mechanisms should be enforced to restrict unauthorized
+      access to data.
+
+7. **Monitoring and Optimization**:
+
+    - Continuous monitoring of system performance and resource utilization is
+      essential to identify bottlenecks and optimize query execution.
+    - Proactive performance tuning, database maintenance, and regular backups
+      should be part of system operations.
+
+8. **Documentation and Training**:
+    - Comprehensive documentation of the database schema, data dictionary, and
+      query optimization techniques should be available for system
+      administrators and data analysts.
+    - Training programs should be provided to ensure that the team can
+      effectively use the system for analytics and reporting.
 
 This project is essential for Airbnb to modernize its data infrastructure,
 ensuring that data from the old system is seamlessly integrated into the new
@@ -241,7 +309,11 @@ any other task associated with the program.
 ## Source Data
 
 In this project, we utilize several CSV source data files, each providing
-distinct and valuable information:
+distinct and valuable information. The largest dataset - **not means by volume
+of data, but data complexity with many data fields** is
+[listings.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/listings.csv.gz).
+This dataset has following type of information all blended together into one
+wide table:
 
 1. **Listing Property Information**:
 
@@ -273,13 +345,16 @@ distinct and valuable information:
         - Host listings count
         - Host total listings count
 
-3. **Listing Review Information**:
-    - This section contains comprehensive data related to guest reviews for each
-      listing property. It includes information such as:
-        - The number of reviews received
-        - Timestamps for the last scrape, first review, and last review
-        - Review scores for various aspects of the listing, including accuracy,
-          cleanliness, check-in, communication, location, and overall rating.
+3. **Listing Review Information**: - This section contains comprehensive data
+   related to guest reviews for each listing property. It includes information
+   such as: - The number of reviews received - Timestamps for the last scrape,
+   first review, and last review - Review scores for various aspects of the
+   listing, including accuracy, cleanliness, check-in, communication, location,
+   and overall rating.
+
+In order to achieve data normalisation to meet the new database requirements and
+avoid data duplications, this dataset has been split mutiple based on each
+unique data features as discussed above.
 
 Please note that
 [calendar.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/calendar.csv.gz)
@@ -287,9 +362,58 @@ and
 [reviews.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/reviews.csv.gz)
 require minimal data structure manipulation, as they primarily serve as records
 of availability and reviews. In contrast,
-[listings.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/listings.csv.gz)
+**_[listings.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/listings.csv.gz)
 is a comprehensive dataset that provides a wealth of information related to
-listing properties and hosts, making it a central focus of this project.
+listing properties and hosts, making it a central focus of this project._**
+
+## Why Use PostgreSQL for this project:
+
+The destination database will be PostgreSQL, which we have following strong
+reasons to support using this SQL database in this project.
+
+1. **Data Integration**: PostgreSQL can integrate with ETL (Extract, Transform,
+   Load) tools to facilitate data integration from various sources into a
+   centralized data warehouse for BI purposes.
+2. **Data Complexity**: The dataset you're working with, particularly the
+   `listings.csv.gz`, contains a wide range of data fields with complex
+   relationships. PostgreSQL is well-suited for handling complex data structures
+   and relationships, making it an ideal choice for normalizing and structuring
+   this data.
+
+3. **Data Normalization**: As mentioned, the goal is to achieve data
+   normalization to meet new database requirements and avoid data duplications.
+   PostgreSQL supports the normalization process by allowing you to define
+   relationships between tables and enforce data integrity constraints.
+
+4. **Structured Query Language (SQL)**: PostgreSQL is a powerful relational
+   database management system that uses SQL. SQL is highly effective for
+   querying, aggregating, and transforming data, which is essential for data
+   analysis and reporting tasks.
+
+5. **Scalability**: PostgreSQL can handle large datasets and is scalable,
+   allowing you to work with both small and large volumes of data effectively.
+   It's suitable for projects that may require future scaling.
+
+6. **Flexibility**: PostgreSQL offers support for various data types, including
+   text, numeric, date/time, and JSON, among others. This flexibility allows
+   users to store and work with diverse types of data within the same database.
+
+7. **Indexes**: PostgreSQL allows users to create indexes on columns, improving
+   query performance, especially when dealing with large datasets.
+
+8. **ACID Compliance**: PostgreSQL is ACID (Atomicity, Consistency, Isolation,
+   Durability)-compliant, ensuring data integrity and reliability.
+
+9. **Advanced Analytics and Data Warehouse**: PostgreSQL provides support for
+   advanced analytics through extensions like PostGIS for spatial analysis and
+   pg_stat_statements for monitoring and optimizing query performance. MOst
+   importantly, PostgreSQL can be used as a data warehousing solution, where you
+   can store and manage historical data for BI analysis.
+
+Considering the complexity of your data and the need for data normalization,
+PostgreSQL is a robust choice that will enable you to efficiently manage and
+analyze your dataset while adhering to best practices in database design and
+normalization.
 
 ## Destination Database Table Structure
 
@@ -313,127 +437,259 @@ to Airbnb listings, hosts, reviews, and geographical regions. Below, we provide
 a comprehensive overview of the tables, their attributes, and the relationships
 that connect them:
 
-### nz_host_detail Table
+---
 
--   **Description**: This table captures detailed information about Airbnb
-    hosts.
--   **Attributes**:
-    -   `host_id`: A unique identifier for each host.
-    -   `host_url`: The URL associated with the host.
-    -   `host_name`: The name of the host.
-    -   `host_since`: The date when the host joined Airbnb.
-    -   `host_location`: The location of the host.
-    -   `host_about`: A brief description of the host.
-    -   `host_thumbnail_url` and `host_picture_url`: URLs to the host's profile
-        pictures.
-    -   `host_neighbourhood`: The neighborhood of the host.
--   **Relationships**:
-    -   None.
+## New Zealand Airbnb Data Tables
 
-### nz_host_stats Table
+This document provides an overview of the database schema for an Airbnb-like
+platform in New Zealand. The schema includes multiple tables designed to store
+various aspects of property listings, host information, reviews, and stay
+statistics. Below, we detail the table schemas, the reasons behind their
+designs, and the relationships among these tables.
 
--   **Description**: This table contains statistical metrics and details about
-    Airbnb hosts.
--   **Attributes**:
-    -   `host_id`: A unique identifier for each host.
-    -   `host_response_time`: The response time of the host.
-    -   `host_response_rate`: The response rate of the host.
-    -   `host_acceptance_rate`: The acceptance rate of booking requests by the
-        host.
-    -   `host_is_superhost`: Indicates if the host has "superhost" status.
-    -   `host_listings_count`: The count of listings hosted by the host.
-    -   `host_total_listings_count`: The total count of listings hosted by the
-        host.
-    -   `host_verifications`: Methods used to verify the host's identity.
-    -   `host_has_profile_pic`: Indicates whether the host has a profile
-        picture.
-    -   `host_identity_verified`: Indicates whether the host's identity has been
-        verified.
--   **Relationships**:
-    -   None.
+### Table Schemas
 
-### nz_listings_review_stats Table
+#### nz_host_detail
 
--   **Description**: This table contains statistical data related to guest
-    reviews for Airbnb listings.
--   **Attributes**:
-    -   `id`: A unique identifier for each review record.
-    -   `number_of_reviews`: The total number of reviews for a listing.
-    -   `last_scraped`: The date when the last scrape of review data occurred.
-    -   `first_review`: The date of the first review for the listing.
-    -   `last_review`: The date of the most recent review.
-    -   `review_scores_rating`: The overall rating score based on guest reviews.
-    -   `review_scores_accuracy`, `review_scores_cleanliness`,
-        `review_scores_checkin`, `review_scores_communication`,
-        `review_scores_location`, and `review_scores_value`: Scores for specific
-        aspects of the listing as rated by guests.
-    -   `reviews_per_month`: The average number of reviews received per month.
--   **Relationships**:
-    -   None.
+-   **host_id (Primary Key)**: Unique identifier for hosts.
+-   **host_url**: URL to the host's profile.
+-   **host_name**: Name of the host.
+-   **host_since**: Date when the host joined the platform.
+-   **host_location**: Location of the host.
+-   **host_about**: Description or bio of the host.
+-   **host_thumbnail_url**: URL to the host's profile thumbnail picture.
+-   **host_picture_url**: URL to the host's profile picture.
+-   **host_neighbourhood**: Neighbourhood associated with the host.
 
-### nz_listings_stay_stats Table
+#### nz_host_stats
 
--   **Description**: This table stores statistical details related to stays at
-    Airbnb listings.
--   **Attributes**:
-    -   `id`: A unique identifier for each stay record.
-    -   `last_searched`: Timestamp indicating the last search related to this
-        listing.
-    -   `price`: The price of the listing.
-    -   `minimum_nights`: The minimum number of nights required for booking.
-    -   `maximum_nights`: The maximum number of nights allowed for booking.
-    -   `minimum_minimum_nights` and `maximum_minimum_nights`: Minimum and
-        maximum values for the minimum number of nights required.
-    -   `minimum_maximum_nights` and `maximum_maximum_nights`: Minimum and
-        maximum values for the maximum number of nights allowed.
-    -   `minimum_nights_avg_ntm` and `maximum_nights_avg_ntm`: Average minimum
-        and maximum nights for stays.
-    -   `has_availability`: Indicates availability status.
-    -   `last_scraped`: Timestamp indicating the last data scrape related to
-        this listing.
--   **Relationships**:
-    -   None.
+-   **host_id (Primary Key)**: Unique identifier for hosts.
+-   **host_response_time**: Response time of the host to inquiries.
+-   **host_response_rate**: Response rate of the host to inquiries.
+-   **host_acceptance_rate**: Acceptance rate of booking requests.
+-   **host_is_superhost**: Indicates if the host has superhost status.
+-   **host_listings_count**: Number of listings managed by the host.
+-   **host_total_listings_count**: Total number of listings associated with the
+    host.
+-   **host_verifications**: Verification methods used by the host.
+-   **host_has_profile_pic**: Indicates if the host has a profile picture.
+-   **host_identity_verified**: Indicates if the host's identity is verified.
 
-### nz_region_parent Table
+#### nz_listings_review_stats
 
--   **Description**: This table records information about parent geographical
-    regions.
--   **Attributes**:
-    -   `region_parent_id`: A unique identifier for each region parent.
-    -   `region_parent_name`: The name of the region parent.
--   **Relationships**:
-    -   None.
+-   **id (Primary Key)**: Unique identifier for review statistics.
+-   **number_of_reviews**: Total number of reviews for a listing.
+-   **last_scraped**: Date when the listing was last scraped.
+-   **first_review**: Date of the first review.
+-   **last_review**: Date of the last review.
+-   **review_scores_rating**: Overall rating score given by guests.
+-   **review_scores_accuracy**: Rating for accuracy.
+-   **review_scores_cleanliness**: Rating for cleanliness.
+-   **review_scores_checkin**: Rating for check-in experience.
+-   **review_scores_communication**: Rating for communication.
+-   **review_scores_location**: Rating for the location.
+-   **review_scores_value**: Rating for the value of the listing.
+-   **reviews_per_month**: Average number of reviews per month.
 
-### nz_region Table
+#### nz_listings_stay_stats
 
--   **Description**: This table stores data about geographical regions and their
-    parent relationships.
--   **Attributes**:
-    -   `region_id`: A unique identifier for each geographical region.
-    -   `region_name`: The name of the geographical region.
-    -   `region_parent_id`: A reference to the parent region to which this
-        region belongs.
--   **Relationships**:
-    -   The `region_parent_id` field establishes a foreign key relationship with
-        the `nz_region_parent` table, connecting child regions to their parent
-        regions.
+-   **id (Primary Key)**: Unique identifier for stay statistics.
+-   **last_searched**: Date when the listing was last searched.
+-   **price**: Pricing information for the listing.
+-   **minimum_nights**: Minimum number of nights required for booking.
+-   **maximum_nights**: Maximum number of nights allowed for booking.
+-   **minimum_minimum_nights**: Minimum value for minimum nights.
+-   **maximum_minimum_nights**: Maximum value for minimum nights.
+-   **minimum_maximum_nights**: Minimum value for maximum nights.
+-   **maximum_maximum_nights**: Maximum value for maximum nights.
+-   **minimum_nights_avg_ntm**: Average minimum nights.
+-   **maximum_nights_avg_ntm**: Average maximum nights.
+-   **has_availability**: Availability status of the listing.
+-   **last_scraped**: Date when the listing was last scraped.
 
-### nz_listings Table
+#### nz_region_parent
 
--   **Description**: This table contains comprehensive information about Airbnb
-    listing properties.
--   **Attributes**:
-    -   `id`: A unique identifier for each listing.
-    -   `listing_url`: The URL associated with the listing.
-    -   `scrape_id`: An identifier for the data scrape.
-    -   `name`: The name of the listing.
-    -   `description`: A detailed description of the listing.
-    -   `neighborhood_overview`: An overview of the neighborhood where the
-        listing is located.
+-   **region_parent_id (Primary Key)**: Unique identifier for parent regions.
+-   **region_parent_name**: Name of the parent region.
 
-These database tables collectively form the structured foundation for organizing
-and accessing data related to Airbnb listings, hosts, reviews, and geographical
-regions.
+#### nz_region
+
+-   **region_id (Primary Key)**: Unique identifier for regions.
+-   **region_name**: Name of the region.
+-   **region_parent_id (Foreign Key)**: References the parent region for
+    hierarchical relationships.
+
+#### nz_listings
+
+-   **id (Primary Key)**: Unique identifier for listings.
+-   **listing_url**: URL to the listing.
+-   **scrape_id**: Identifier for the data scraping event.
+-   **name**: Name of the listing.
+-   **description**: Description of the listing.
+-   **neighborhood_overview**: Overview of the neighborhood.
+-   **picture_url**: URL to the listing's picture.
+-   **host_id (Foreign Key)**: References the host of the listing.
+-   **neighbourhood**: Neighborhood where the listing is located.
+-   **latitude**: Latitude coordinate of the listing.
+-   **longitude**: Longitude coordinate of the listing.
+-   **property_type**: Type of property (e.g., apartment, house).
+-   **room_type**: Type of room (e.g., entire home, private room).
+-   **accommodates**: Number of guests the listing can accommodate.
+-   **bathrooms**: Number of bathrooms.
+-   **bathrooms_text**: Text description of bathrooms.
+-   **bedrooms**: Number of bedrooms.
+-   **beds**: Number of beds.
+-   **amenities**: Amenities provided in the listing.
+-   **instant_bookable**: Indicates if instant booking is available.
+-   **region_id (Foreign Key)**: References the region where the listing is
+    located.
+
+#### nz_reviews
+
+-   **listing_id (Foreign Key)**: References the listing to which the review
+    belongs.
+-   **id (Primary Key)**: Unique identifier for reviews.
+-   **date**: Date of the review.
+-   **reviewer_id**: Unique
+
+### Reasons for Table Designs
+
+The table designs are based on the need to efficiently store and query data for
+an Airbnb-like platform in New Zealand. The design decisions are guided by
+various analysis use cases, including:
+
+1. **Host and Property Information**:
+
+    - The separation of host details (nz_host_detail) and host statistics
+      (nz_host_stats) allows for easy retrieval of host-related information and
+      statistical analysis of host performance.
+
+2. **Listing Reviews and Statistics**:
+
+    - nz_listings_review_stats stores comprehensive review statistics, enabling
+      insights into listing quality.
+    - nz_reviews captures individual guest reviews, providing granular feedback.
+
+3. **Property Stay Statistics**:
+
+    - nz_listings_stay_stats tracks stay-related statistics, facilitating price
+      analysis, and minimum/maximum stay duration calculations.
+
+4. **Region Hierarchy**:
+
+    - nz_region_parent and nz_region support a hierarchical structure for
+      regions, aiding location-based analysis.
+
+5. **Listing Details**:
+
+    - nz_listings stores detailed property listing information, including
+      location, amenities, and booking-related details.
+
+6. **Availability and Pricing**:
+    - nz_calendar records availability and pricing data, crucial for booking
+      analysis.
+
+### Relationships Among Tables
+
+-   nz_host_detail and nz_host_stats are related by the host_id.
+-   nz_listings_review_stats and nz_reviews are linked by the id.
+-   nz_listings_stay_stats is associated with nz_listings through the id.
+-   nz_region has a foreign key referencing nz_region_parent for parent region
+    relationships.
+-   nz_listings has a foreign key referencing nz_host_detail for host details.
+-   nz_listings also has a
+
+---
+
+## Database SQL Functions and Stored Procedures
+
+This document outlines a set of stored procedures and functions that are
+designed to be executed automatically by the system. These procedures and
+functions play a crucial role in maintaining the quality of our database and
+managing bookings effectively. It's important to note that the system itself is
+responsible for performing quality checks before calling these functions to
+ensure smooth operation.
+
+### 1. Procedure: `cancel_booking`
+
+#### Purpose:
+
+The `cancel_booking` procedure is responsible for automatically canceling
+bookings. It updates the 'available' column in the 'nz_calendar' table to 't'
+for matching rows. Before calling this procedure, the system should perform
+checks to verify the validity of the cancellation request.
+
+#### Parameters:
+
+-   `listing_id`: The ID of the listing for which the booking is canceled.
+-   `start_date`: The start date of the booking.
+-   `end_date`: The end date of the booking.
+
+### 2. Function: `check_availability`
+
+#### Purpose:
+
+The `check_availability` function is designed for automated availability checks.
+It examines the 'nz_calendar' table based on the provided listing ID and date
+range. The system should perform pre-checks to ensure that the function is
+called with accurate data.
+
+#### Parameters:
+
+-   `p_listing_id`: The numeric ID of the listing to check availability for.
+-   `p_start_date`: The start date of the date range.
+-   `p_end_date`: The end date of the date range.
+
+### 3. Procedure: `made_booking`
+
+#### Purpose:
+
+The `made_booking` procedure automates the process of marking a booking as made.
+It updates the 'available' column in the 'nz_calendar' table to 'f' for matching
+rows. Prior to invoking this procedure, the system should validate and confirm
+the booking request.
+
+#### Parameters:
+
+-   `listing_id`: The ID of the listing for which the booking is made.
+-   `start_date`: The start date of the booking.
+-   `end_date`: The end date of the booking.
+
+### 4. Procedure: `reset_database`
+
+#### Purpose:
+
+The `reset_database` procedure is responsible for resetting the entire database
+to its initial state. This procedure is normally & only called when doing the
+data migration functions. **This is a critical operation that should be executed
+with caution. The system should ensure that all data is appropriately backed up
+and conduct necessary checks before proceeding.**
+
+### 5. Procedure: `update_price_and_availability`
+
+#### Purpose:
+
+The `update_price_and_availability` procedure automates the process of updating
+the 'price' and 'has_availability' columns in the 'nz_listings_stay_stats'
+table. The system should trigger this procedure based on predefined schedules
+and perform relevant checks to ensure data accuracy.
+
+### 6. Procedure: `update_stay_stats`
+
+#### Purpose:
+
+The `update_stay_stats` procedure is responsible for updating various columns in
+the 'nz_listings_stay_stats' table. It aggregates data from the 'nz_calendar'
+table. The system should schedule this procedure as needed and validate the data
+it processes.
+
+---
+
+In summary, these stored procedures and functions are designed to be executed
+automatically by the system. However, the system's responsibility goes beyond
+just calling these functions. It should perform quality checks, data validation,
+and ensure that the right conditions are met before invoking these operations to
+maintain the integrity of our database and booking management processes.
 
 ## Authors
 

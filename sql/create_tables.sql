@@ -1,17 +1,20 @@
 /*
- This SQL script creates several tables for a database related to Airbnb listings in New Zealand. The tables include:
+ This SQL script creates several tables for an Airbnb-like platform in New Zealand. 
  
- - nz_host_detail: contains information about the hosts of the listings.
- - yansh877.nz_host_stats: contains statistics about the hosts of the listings.
- - nz_listings_review_stats: contains review statistics for the listings.
- - nz_listings_stay_stats: contains stay statistics for the listings.
- - nz_region_parent: contains information about the parent regions of the listings.
- - nz_region: contains information about the regions of the listings.
- - nz_listings: contains information about the listings.
- - nz_reviews: contains reviews for the listings.
- - nz_calendar: contains availability and pricing information for the listings.
+ The tables created are:
+ - nz_host_detail: contains information about the hosts, such as their name, location, and profile picture.
+ - nz_host_stats: contains statistics about the hosts, such as their response time and acceptance rate.
+ - nz_listings_review_stats: contains statistics about the reviews of the listings, such as the number of reviews and the review scores.
+ - nz_listings_stay_stats: contains statistics about the stays of the listings, such as the price and the minimum and maximum number of nights.
+ - nz_region_parent: contains information about the parent regions of the regions, such as the name of the parent region.
+ - nz_region: contains information about the regions, such as their name and parent region.
+ - nz_listings: contains information about the listings, such as their name, location, and amenities.
+ - nz_reviews: contains information about the reviews of the listings, such as the date and the comments.
+ - nz_calendar: contains information about the availability and price of the listings on specific dates.
  
- Each table has its own set of columns and constraints, as specified in the script. The script also drops any existing tables with the same names before creating the new ones.
+ Each table has its own set of columns and constraints, such as primary keys and foreign keys, to ensure data integrity and consistency.
+ 
+ The script also includes comments to drop the tables if they already exist, to avoid errors when running the script multiple times.
  */
 -- nz_host_detail definition
 -- Drop table
@@ -20,7 +23,7 @@ CREATE TABLE nz_host_detail (
     host_id int8 NOT NULL,
     host_url text NULL,
     host_name text NULL,
-    host_since text NULL,
+    host_since date NULL,
     host_location text NULL,
     host_about text NULL,
     host_thumbnail_url text NULL,
@@ -31,8 +34,8 @@ CREATE TABLE nz_host_detail (
 );
 -- nz_host_stats definition
 -- Drop table
--- DROP TABLE yansh877.nz_host_stats;
-CREATE TABLE yansh877.nz_host_stats (
+-- DROP TABLE nz_host_stats;
+CREATE TABLE nz_host_stats (
     host_id int8 NOT NULL,
     host_response_time text NULL,
     host_response_rate text NULL,
@@ -53,7 +56,7 @@ CREATE INDEX index_host_stats_id ON nz_host_stats USING btree (host_id);
 CREATE TABLE nz_listings_review_stats (
     id int8 NOT NULL,
     number_of_reviews int8 NULL,
-    last_scraped text NULL,
+    last_scraped date NULL,
     first_review text NULL,
     last_review text NULL,
     review_scores_rating float8 NULL,
@@ -72,7 +75,7 @@ CREATE TABLE nz_listings_review_stats (
 -- DROP TABLE nz_listings_stay_stats;
 CREATE TABLE nz_listings_stay_stats (
     id int8 NOT NULL,
-    last_searched text NULL,
+    last_searched date NULL,
     price text NULL,
     minimum_nights int8 NULL,
     maximum_nights int8 NULL,
@@ -83,7 +86,7 @@ CREATE TABLE nz_listings_stay_stats (
     minimum_nights_avg_ntm float8 NULL,
     maximum_nights_avg_ntm float8 NULL,
     has_availability text NULL,
-    last_scraped text NULL,
+    last_scraped date NULL,
     CONSTRAINT nz_listings_stay_stats_pkey PRIMARY KEY (id),
     CONSTRAINT stay_stats_un UNIQUE (id)
 );
@@ -144,7 +147,7 @@ CREATE TABLE nz_listings (
 CREATE TABLE nz_reviews (
     listing_id int8 NULL,
     id int8 NOT NULL,
-    "date" text NULL,
+    "date" date NULL,
     reviewer_id int8 NULL,
     reviewer_name text NULL,
     "comments" text NULL,
@@ -157,7 +160,7 @@ CREATE TABLE nz_reviews (
 -- DROP TABLE nz_calendar;
 CREATE TABLE nz_calendar (
     listing_id int8 NOT NULL,
-    "date" text NOT NULL,
+    "date" date NOT NULL,
     available text NULL,
     price text NULL,
     adjusted_price text NULL,
