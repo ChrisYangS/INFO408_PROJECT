@@ -1,7 +1,7 @@
 /*
- This stored procedure updates the price and availability of listings in the nz_listings_stay_stats table based on the most recent data in the nz_calendar table. It retrieves the most recent price, availability, minimum nights, and maximum nights for each listing from the nz_calendar table and updates the corresponding rows in the nz_listings_stay_stats table. The number of rows affected by the update is printed as a notice. If an error occurs during the update, the error message is printed as a notice. A completion message is printed when the procedure finishes successfully.
+ This stored procedure updates the price and availability of listings in the nz_listings_stay_stats table based on the current date's information in the nz_calendar table. The procedure first selects the necessary information from the nz_calendar table for the current date, and then updates the corresponding rows in the nz_listings_stay_stats table. The number of rows affected by the update is printed as a notice. If an error occurs during the update, the error message is printed as a notice. A final notice is printed when the procedure is completed successfully.
  */
-CREATE OR REPLACE PROCEDURE update_price_and_availability() LANGUAGE plpgsql AS $procedure$
+CREATE OR REPLACE PROCEDURE update_price_and_availability() LANGUAGE plpgsql AS $$
 DECLARE rows_affected INT;
 BEGIN BEGIN -- Your original SQL code here
 UPDATE nz_listings_stay_stats
@@ -17,11 +17,7 @@ FROM (
             nc.minimum_nights,
             nc.maximum_nights
         FROM nz_calendar nc
-        WHERE nc.date = (
-                SELECT MAX(date)
-                FROM nz_calendar
-                WHERE listing_id = nc.listing_id
-            )
+        WHERE nc.date = CURRENT_DATE
     ) s
 WHERE nz_listings_stay_stats.id = s.listing_id;
 -- Get the number of rows affected by the UPDATE statement
@@ -37,3 +33,4 @@ END;
 -- Print a message when the procedure is completed
 RAISE NOTICE 'Stored procedure update_price_and_availability completed successfully.';
 END;
+$$;
