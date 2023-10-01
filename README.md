@@ -40,6 +40,7 @@ in this migration have been downloaded from the specified source.
         -   [nz_region](#nz_region)
         -   [nz_listings](#nz_listings)
         -   [nz_reviews](#nz_reviews)
+        -   [nz_calendar](#nz_calendar)
     -   [Reasons for Table Designs](#reasons-for-table-designs)
     -   [Relationships Among Tables](#relationships-among-tables)
 -   [Database SQL Functions and Stored Procedures](#database-sql-functions-and-stored-procedures)
@@ -491,7 +492,7 @@ to Airbnb listings, hosts, reviews, and geographical regions. Below, we provide
 a comprehensive overview of the tables, their attributes, and the relationships
 that connect them:
 
----
+[BACK TO Table of Contents](#table-of-contents)
 
 # New Zealand Airbnb Data Tables
 
@@ -505,106 +506,148 @@ designs, and the relationships among these tables.
 
 ### nz_host_detail
 
--   **host_id (Primary Key)**: Unique identifier for hosts.
--   **host_url**: URL to the host's profile.
--   **host_name**: Name of the host.
--   **host_since**: Date when the host joined the platform.
--   **host_location**: Location of the host.
--   **host_about**: Description or bio of the host.
--   **host_thumbnail_url**: URL to the host's profile thumbnail picture.
--   **host_picture_url**: URL to the host's profile picture.
--   **host_neighbourhood**: Neighbourhood associated with the host.
+-   _host_id (int8 NOT NULL):_ Unique identifier for hosts.
+-   _host_url (text NULL):_ URL associated with the host.
+-   _host_name (text NULL):_ Name of the host.
+-   _host_since (date NULL):_ Date when the host joined.
+-   _host_location (text NULL):_ Location of the host.
+-   _host_about (text NULL):_ Information about the host.
+-   _host_thumbnail_url (text NULL):_ URL to the host's thumbnail picture.
+-   _host_picture_url (text NULL):_ URL to the host's picture.
+-   _host_neighbourhood (text NULL):_ Neighbourhood information related to the
+    host.
+-   _Primary Key:_ host_id (int8)
+-   _Unique Constraint:_ host_id (int8)
 
 ### nz_host_stats
 
--   **host_id (Primary Key)**: Unique identifier for hosts.
--   **host_response_time**: Response time of the host to inquiries.
--   **host_response_rate**: Response rate of the host to inquiries.
--   **host_acceptance_rate**: Acceptance rate of booking requests.
--   **host_is_superhost**: Indicates if the host has superhost status.
--   **host_listings_count**: Number of listings managed by the host.
--   **host_total_listings_count**: Total number of listings associated with the
+-   _host_id (int8 NOT NULL):_ Unique identifier for hosts.
+-   _host_response_time (text NULL):_ Response time of the host.
+-   _host_response_rate (text NULL):_ Response rate of the host.
+-   _host_acceptance_rate (text NULL):_ Acceptance rate of the host.
+-   _host_is_superhost (text NULL):_ Indicates if the host is a superhost.
+-   _host_listings_count (int8 NULL):_ Count of listings by the host.
+-   _host_total_listings_count (int8 NULL):_ Total count of listings by the
     host.
--   **host_verifications**: Verification methods used by the host.
--   **host_has_profile_pic**: Indicates if the host has a profile picture.
--   **host_identity_verified**: Indicates if the host's identity is verified.
+-   _host_verifications (text NULL):_ Verification methods for the host.
+-   _host_has_profile_pic (text NULL):_ Indicates if the host has a profile
+    picture.
+-   _host_identity_verified (text NULL):_ Indicates if the host's identity is
+    verified.
+-   _Primary Key:_ host_id (int8)
+-   _Unique Constraint:_ host_id (int8)
+-   _Index:_ index_host_stats_id (host_id)
 
 ### nz_listings_review_stats
 
--   **id (Primary Key)**: Unique identifier for review statistics.
--   **number_of_reviews**: Total number of reviews for a listing.
--   **last_scraped**: Date when the listing was last scraped.
--   **first_review**: Date of the first review.
--   **last_review**: Date of the last review.
--   **review_scores_rating**: Overall rating score given by guests.
--   **review_scores_accuracy**: Rating for accuracy.
--   **review_scores_cleanliness**: Rating for cleanliness.
--   **review_scores_checkin**: Rating for check-in experience.
--   **review_scores_communication**: Rating for communication.
--   **review_scores_location**: Rating for the location.
--   **review_scores_value**: Rating for the value of the listing.
--   **reviews_per_month**: Average number of reviews per month.
+-   _id (int8 NOT NULL):_ Unique identifier for listing review statistics.
+-   _number_of_reviews (int8 NULL):_ Number of reviews for the listing.
+-   _last_scraped (date NULL):_ Date when the listing data was last scraped.
+-   _first_review (text NULL):_ Textual information about the first review.
+-   _last_review (text NULL):_ Textual information about the last review.
+-   _review_scores_rating (float8 NULL):_ Rating score for reviews.
+-   _review_scores_accuracy (float8 NULL):_ Accuracy score for reviews.
+-   _review_scores_cleanliness (float8 NULL):_ Cleanliness score for reviews.
+-   _review_scores_checkin (float8 NULL):_ Check-in score for reviews.
+-   _review_scores_communication (float8 NULL):_ Communication score for
+    reviews.
+-   _review_scores_location (float8 NULL):_ Location score for reviews.
+-   _review_scores_value (float8 NULL):_ Value score for reviews.
+-   _reviews_per_month (float8 NULL):_ Number of reviews per month.
+-   _Primary Key:_ id (int8)
+-   _Unique Constraint:_ id (int8)
 
 ### nz_listings_stay_stats
 
--   **id (Primary Key)**: Unique identifier for stay statistics.
--   **last_searched**: Date when the listing was last searched.
--   **price**: Pricing information for the listing.
--   **minimum_nights**: Minimum number of nights required for booking.
--   **maximum_nights**: Maximum number of nights allowed for booking.
--   **minimum_minimum_nights**: Minimum value for minimum nights.
--   **maximum_minimum_nights**: Maximum value for minimum nights.
--   **minimum_maximum_nights**: Minimum value for maximum nights.
--   **maximum_maximum_nights**: Maximum value for maximum nights.
--   **minimum_nights_avg_ntm**: Average minimum nights.
--   **maximum_nights_avg_ntm**: Average maximum nights.
--   **has_availability**: Availability status of the listing.
--   **last_scraped**: Date when the listing was last scraped.
+-   _id (int8 NOT NULL):_ Unique identifier for listing stay statistics.
+-   _last_searched (date NULL):_ Date when the listing was last searched.
+-   _price (text NULL):_ Price information for the listing.
+-   _minimum_nights (int8 NULL):_ Minimum number of nights for the listing.
+-   _maximum_nights (int8 NULL):_ Maximum number of nights for the listing.
+-   _minimum_minimum_nights (int8 NULL):_ Minimum value for minimum nights.
+-   _maximum_minimum_nights (int8 NULL):_ Maximum value for minimum nights.
+-   _minimum_maximum_nights (int8 NULL):_ Minimum value for maximum nights.
+-   _maximum_maximum_nights (int8 NULL):_ Maximum value for maximum nights.
+-   _minimum_nights_avg_ntm (float8 NULL):_ Average minimum nights.
+-   _maximum_nights_avg_ntm (float8 NULL):_ Average maximum nights.
+-   _has_availability (text NULL):_ Indicates availability.
+-   _last_scraped (date NULL):_ Date when the data was last scraped.
+-   _Primary Key:_ id (int8)
+-   _Unique Constraint:_ id (int8)
 
 ### nz_region_parent
 
--   **region_parent_id (Primary Key)**: Unique identifier for parent regions.
--   **region_parent_name**: Name of the parent region.
+-   _region_parent_id (int8 NOT NULL):_ Unique identifier for parent regions.
+-   _region_parent_name (text NULL):_ Name of the parent region.
+-   _Primary Key:_ region_parent_id (int8)
+-   _Unique Constraint:_ region_parent_id (int8)
 
 ### nz_region
 
--   **region_id (Primary Key)**: Unique identifier for regions.
--   **region_name**: Name of the region.
--   **region_parent_id (Foreign Key)**: References the parent region for
-    hierarchical relationships.
+-   _region_id (int8 NOT NULL):_ Unique identifier for regions.
+-   _region_name (text NULL):_ Name of the region.
+-   _region_parent_id (int8 NULL):_ Identifier of the parent region.
+-   _Primary Key:_ region_id (int8)
+-   _Unique Constraint:_ region_id (int8)
+-   _Foreign Key:_ fk_region_parent_id (region_parent_id) REFERENCES
+    nz_region_parent(region_parent_id)
+-   _Index:_ index_region_id (region_id)
 
 ### nz_listings
 
--   **id (Primary Key)**: Unique identifier for listings.
--   **listing_url**: URL to the listing.
--   **scrape_id**: Identifier for the data scraping event.
--   **name**: Name of the listing.
--   **description**: Description of the listing.
--   **neighborhood_overview**: Overview of the neighborhood.
--   **picture_url**: URL to the listing's picture.
--   **host_id (Foreign Key)**: References the host of the listing.
--   **neighbourhood**: Neighborhood where the listing is located.
--   **latitude**: Latitude coordinate of the listing.
--   **longitude**: Longitude coordinate of the listing.
--   **property_type**: Type of property (e.g., apartment, house).
--   **room_type**: Type of room (e.g., entire home, private room).
--   **accommodates**: Number of guests the listing can accommodate.
--   **bathrooms**: Number of bathrooms.
--   **bathrooms_text**: Text description of bathrooms.
--   **bedrooms**: Number of bedrooms.
--   **beds**: Number of beds.
--   **amenities**: Amenities provided in the listing.
--   **instant_bookable**: Indicates if instant booking is available.
--   **region_id (Foreign Key)**: References the region where the listing is
-    located.
+-   _id (int8 NOT NULL):_ Unique identifier for listings.
+-   _listing_url (text NULL):_ URL associated with the listing.
+-   _scrape_id (int8 NULL):_ Identifier for data scraping.
+-   _name (text NULL):_ Name of the listing.
+-   _description (text NULL):_ Description of the listing.
+-   _neighborhood_overview (text NULL):_ Overview of the neighborhood.
+-   _picture_url (text NULL):_ URL to the listing's picture.
+-   _host_id (int8 NULL):_ Unique identifier for hosts.
+-   _neighbourhood (text NULL):_ Neighborhood information.
+-   _latitude (float8 NULL):_ Latitude coordinate.
+-   _longitude (float8 NULL):_ Longitude coordinate.
+-   _property_type (text NULL):_ Type of the property.
+-   _room_type (text NULL):_ Type of the room.
+-   _accommodates (int8 NULL):_ Number of guests accommodated.
+-   _bathrooms (float8 NULL):_ Number of bathrooms.
+-   _bathrooms_text (text NULL):_ Textual information about bathrooms.
+-   _bedrooms (float8 NULL):_ Number of bedrooms.
+-   _beds (float8 NULL):_ Number of beds.
+-   _amenities (text NULL):_ Amenities provided.
+-   _instant_bookable (text NULL):_ Indicates if instant booking is available.
+-   _region_id (int8 NULL):_ Identifier of the region.
+-   _Primary Key:_ id (int8)
+-   _Unique Constraint:_ id (int8)
+-   _Foreign Key:_ fk_host_id (host_id) REFERENCES nz_host
 
 ### nz_reviews
 
--   **listing_id (Foreign Key)**: References the listing to which the review
-    belongs.
--   **id (Primary Key)**: Unique identifier for reviews.
--   **date**: Date of the review.
--   **reviewer_id**: Unique
+-   _listing_id (int8 NULL):_ Identifier for listings.
+-   _id (int8 NOT NULL):_ Unique identifier for reviews.
+-   _date (date NULL):_ Date of the review.
+-   _reviewer_id (int8 NULL):_ Identifier for reviewers.
+-   _reviewer_name (text NULL):_ Name of the reviewer.
+-   _comments (text NULL):_ Reviewer's comments.
+-   _Primary Key:_ id (int8)
+-   _Unique Constraint:_ id (int8)
+-   _Foreign Key:_ fk_review_id (listing_id) REFERENCES nz_listings(id)
+
+### nz_calendar
+
+-   _listing_id (int8 NOT NULL):_ Identifier for listings.
+-   _date (date NOT NULL):_ Date for calendar events.
+-   _available (text NULL):_ Availability status.
+-   _price (text NULL):_ Price information.
+-   _adjusted_price (text NULL):_ Adjusted price information.
+-   _minimum_nights (float8 NULL):_ Minimum number of nights.
+-   _maximum_nights (float8 NULL):_ Maximum number of nights.
+-   _Unique Constraint:_ (listing_id, date)
+-   _Primary Key:_ (listing_id, date)
+-   _Foreign Key:_ fk_calendar_id (listing_id) REFERENCES nz_listings(id)
+
+These tables and their respective columns are designed to store data related to
+an Airbnb-like platform in New Zealand, facilitating efficient data management
+and analysis for various aspects of hosting, listing, and reviews.
 
 [BACK TO Table Schemas](#table-schemas)
 
@@ -644,8 +687,6 @@ various analysis use cases, including:
 6. **Availability and Pricing**:
     - nz_calendar records availability and pricing data, crucial for booking
       analysis.
-
-[BACK TO Reasons for Table Designs](#reasons-for-table-designs)
 
 ## Relationships Among Tables
 
