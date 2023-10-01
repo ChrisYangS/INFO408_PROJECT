@@ -1,5 +1,12 @@
 # INFO 408 Assignment 2 Project
 
+### MUST READ FIRST
+
+<mark><span style="color:red">**Note**: all source codes are saved at GitHub
+Repository [INFO408_PROJECT](https://github.com/ChrisYangS/INFO408_PROJECT). To
+review source code or following instructions to run the ETL process, you need to
+clone this repository to your local machine</span></mark>.
+
 This document offers an overview of the New Zealand Airbnb data migration
 project, providing essential technical guidance on the following aspects:
 
@@ -20,6 +27,7 @@ in this migration have been downloaded from the specified source.
 # Table of Contents
 
 -   [INFO 408 Assignment 2 Project](#info-408-assignment-2-project)
+    -   [MUST READ FIRST](#must-read-first)
 -   [Table of Contents](#table-of-contents)
 -   [Description](#description)
 -   [Getting Started](#getting-started)
