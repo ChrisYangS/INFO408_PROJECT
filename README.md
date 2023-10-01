@@ -17,7 +17,53 @@ project, providing essential technical guidance on the following aspects:
 Please note that this project is a simulated exercise, and all raw data utilized
 in this migration have been downloaded from the specified source.
 
-## Description
+# Table of Contents
+
+-   [INFO 408 Assignment 2 Project](#info-408-assignment-2-project)
+-   [Table of Contents](#table-of-contents)
+-   [Description](#description)
+-   [Getting Started](#getting-started)
+    -   [Dependencies](#dependencies)
+    -   [Installing](#installing)
+    -   [Installation Instructions](#installation-instructions)
+    -   [Executing program](#executing-program)
+-   [Source Data](#source-data)
+-   [Why Use PostgreSQL for this project:](#why-use-postgresql-for-this-project)
+-   [Destination Database Table Structure](#destination-database-table-structure)
+-   [New Zealand Airbnb Data Tables](#new-zealand-airbnb-data-tables)
+    -   [Table Schemas](#table-schemas)
+        -   [nz_host_detail](#nz_host_detail)
+        -   [nz_host_stats](#nz_host_stats)
+        -   [nz_listings_review_stats](#nz_listings_review_stats)
+        -   [nz_listings_stay_stats](#nz_listings_stay_stats)
+        -   [nz_region_parent](#nz_region_parent)
+        -   [nz_region](#nz_region)
+        -   [nz_listings](#nz_listings)
+        -   [nz_reviews](#nz_reviews)
+    -   [Reasons for Table Designs](#reasons-for-table-designs)
+    -   [Relationships Among Tables](#relationships-among-tables)
+-   [Database SQL Functions and Stored Procedures](#database-sql-functions-and-stored-procedures)
+    -   [1. Procedure: `cancel_booking`](#1-procedure-cancel_booking)
+        -   [Purpose:](#purpose)
+        -   [Parameters:](#parameters)
+    -   [2. Function: `check_availability`](#2-function-check_availability)
+        -   [Purpose:](#purpose-1)
+        -   [Parameters:](#parameters-1)
+    -   [3. Procedure: `made_booking`](#3-procedure-made_booking)
+        -   [Purpose:](#purpose-2)
+        -   [Parameters:](#parameters-2)
+    -   [4. Procedure: `reset_database`](#4-procedure-reset_database)
+        -   [Purpose:](#purpose-3)
+    -   [5. Procedure: `update_price_and_availability`](#5-procedure-update_price_and_availability)
+        -   [Purpose:](#purpose-4)
+    -   [6. Procedure: `update_stay_stats`](#6-procedure-update_stay_stats)
+        -   [Purpose:](#purpose-5)
+    -   [7. create_tables.sql sql file](#7-create_tablessql-sql-file)
+-   [Special Thanks](#special-thanks)
+-   [Authors](#authors)
+-   [Version History](#version-history)
+
+# Description
 
 Project Summary: Airbnb Data Migration and Database Restructuring
 
@@ -146,9 +192,11 @@ customers with valuable insights into property performance and customer reviews.
 Overall, this project represents a critical step in Airbnb's data management and
 analytics capabilities.
 
-## Getting Started
+[BACK TO Table of Contents](#table-of-contents)
 
-### Dependencies
+# Getting Started
+
+## Dependencies
 
 To successfully run this application, please ensure the following prerequisites
 are met:
@@ -188,9 +236,9 @@ application, ensuring that it can access the required data sources and the
 database while operating seamlessly on your specific operating system with the
 necessary Python packages installed.
 
-### Installing
+## Installing
 
-### Installation Instructions
+## Installation Instructions
 
 Follow these steps to set up and run the data extraction application:
 
@@ -240,7 +288,7 @@ ensuring that it can access the required datasets, install necessary Python
 packages, and authenticate your credentials. You can then execute the data
 extraction process by running the provided Jupyter Notebook.
 
-### Executing program
+## Executing program
 
 To execute the program, follow these steps:
 
@@ -306,7 +354,9 @@ By following these steps, you will be able to run the program successfully and
 execute the specified functionality, whether it's data extraction, analysis, or
 any other task associated with the program.
 
-## Source Data
+[BACK TO Table of Contents](#table-of-contents)
+
+# Source Data
 
 In this project, we utilize several CSV source data files, each providing
 distinct and valuable information. The largest dataset - **not means by volume
@@ -366,7 +416,9 @@ of availability and reviews. In contrast,
 is a comprehensive dataset that provides a wealth of information related to
 listing properties and hosts, making it a central focus of this project._**
 
-## Why Use PostgreSQL for this project:
+[BACK TO Table of Contents](#table-of-contents)
+
+# Why Use PostgreSQL for this project:
 
 The destination database will be PostgreSQL, which we have following strong
 reasons to support using this SQL database in this project.
@@ -415,7 +467,9 @@ PostgreSQL is a robust choice that will enable you to efficiently manage and
 analyze your dataset while adhering to best practices in database design and
 normalization.
 
-## Destination Database Table Structure
+[BACK TO Table of Contents](#table-of-contents)
+
+# Destination Database Table Structure
 
 The database comprises several tables, each designed to store specific
 categories of data related to Airbnb listings, hosts, reviews, and other
@@ -439,7 +493,7 @@ that connect them:
 
 ---
 
-## New Zealand Airbnb Data Tables
+# New Zealand Airbnb Data Tables
 
 This document provides an overview of the database schema for an Airbnb-like
 platform in New Zealand. The schema includes multiple tables designed to store
@@ -447,9 +501,9 @@ various aspects of property listings, host information, reviews, and stay
 statistics. Below, we detail the table schemas, the reasons behind their
 designs, and the relationships among these tables.
 
-### Table Schemas
+## Table Schemas
 
-#### nz_host_detail
+### nz_host_detail
 
 -   **host_id (Primary Key)**: Unique identifier for hosts.
 -   **host_url**: URL to the host's profile.
@@ -461,7 +515,7 @@ designs, and the relationships among these tables.
 -   **host_picture_url**: URL to the host's profile picture.
 -   **host_neighbourhood**: Neighbourhood associated with the host.
 
-#### nz_host_stats
+### nz_host_stats
 
 -   **host_id (Primary Key)**: Unique identifier for hosts.
 -   **host_response_time**: Response time of the host to inquiries.
@@ -475,7 +529,7 @@ designs, and the relationships among these tables.
 -   **host_has_profile_pic**: Indicates if the host has a profile picture.
 -   **host_identity_verified**: Indicates if the host's identity is verified.
 
-#### nz_listings_review_stats
+### nz_listings_review_stats
 
 -   **id (Primary Key)**: Unique identifier for review statistics.
 -   **number_of_reviews**: Total number of reviews for a listing.
@@ -491,7 +545,7 @@ designs, and the relationships among these tables.
 -   **review_scores_value**: Rating for the value of the listing.
 -   **reviews_per_month**: Average number of reviews per month.
 
-#### nz_listings_stay_stats
+### nz_listings_stay_stats
 
 -   **id (Primary Key)**: Unique identifier for stay statistics.
 -   **last_searched**: Date when the listing was last searched.
@@ -507,19 +561,19 @@ designs, and the relationships among these tables.
 -   **has_availability**: Availability status of the listing.
 -   **last_scraped**: Date when the listing was last scraped.
 
-#### nz_region_parent
+### nz_region_parent
 
 -   **region_parent_id (Primary Key)**: Unique identifier for parent regions.
 -   **region_parent_name**: Name of the parent region.
 
-#### nz_region
+### nz_region
 
 -   **region_id (Primary Key)**: Unique identifier for regions.
 -   **region_name**: Name of the region.
 -   **region_parent_id (Foreign Key)**: References the parent region for
     hierarchical relationships.
 
-#### nz_listings
+### nz_listings
 
 -   **id (Primary Key)**: Unique identifier for listings.
 -   **listing_url**: URL to the listing.
@@ -544,7 +598,7 @@ designs, and the relationships among these tables.
 -   **region_id (Foreign Key)**: References the region where the listing is
     located.
 
-#### nz_reviews
+### nz_reviews
 
 -   **listing_id (Foreign Key)**: References the listing to which the review
     belongs.
@@ -552,7 +606,9 @@ designs, and the relationships among these tables.
 -   **date**: Date of the review.
 -   **reviewer_id**: Unique
 
-### Reasons for Table Designs
+[BACK TO Table Schemas](#table-schemas)
+
+## Reasons for Table Designs
 
 The table designs are based on the need to efficiently store and query data for
 an Airbnb-like platform in New Zealand. The design decisions are guided by
@@ -589,7 +645,9 @@ various analysis use cases, including:
     - nz_calendar records availability and pricing data, crucial for booking
       analysis.
 
-### Relationships Among Tables
+[BACK TO Reasons for Table Designs](#reasons-for-table-designs)
+
+## Relationships Among Tables
 
 -   nz_host_detail and nz_host_stats are related by the host_id.
 -   nz_listings_review_stats and nz_reviews are linked by the id.
@@ -599,9 +657,9 @@ various analysis use cases, including:
 -   nz_listings has a foreign key referencing nz_host_detail for host details.
 -   nz_listings also has a
 
----
+[BACK TO Table of Contents](#table-of-contents)
 
-## Database SQL Functions and Stored Procedures
+# Database SQL Functions and Stored Procedures
 
 This document outlines a set of stored procedures and functions that are
 designed to be executed automatically by the system. These procedures and
@@ -610,54 +668,54 @@ managing bookings effectively. It's important to note that the system itself is
 responsible for performing quality checks before calling these functions to
 ensure smooth operation.
 
-### 1. Procedure: `cancel_booking`
+## 1. Procedure: `cancel_booking`
 
-#### Purpose:
+### Purpose:
 
 The `cancel_booking` procedure is responsible for automatically canceling
 bookings. It updates the 'available' column in the 'nz_calendar' table to 't'
 for matching rows. Before calling this procedure, the system should perform
 checks to verify the validity of the cancellation request.
 
-#### Parameters:
+### Parameters:
 
 -   `listing_id`: The ID of the listing for which the booking is canceled.
 -   `start_date`: The start date of the booking.
 -   `end_date`: The end date of the booking.
 
-### 2. Function: `check_availability`
+## 2. Function: `check_availability`
 
-#### Purpose:
+### Purpose:
 
 The `check_availability` function is designed for automated availability checks.
 It examines the 'nz_calendar' table based on the provided listing ID and date
 range. The system should perform pre-checks to ensure that the function is
 called with accurate data.
 
-#### Parameters:
+### Parameters:
 
 -   `p_listing_id`: The numeric ID of the listing to check availability for.
 -   `p_start_date`: The start date of the date range.
 -   `p_end_date`: The end date of the date range.
 
-### 3. Procedure: `made_booking`
+## 3. Procedure: `made_booking`
 
-#### Purpose:
+### Purpose:
 
 The `made_booking` procedure automates the process of marking a booking as made.
 It updates the 'available' column in the 'nz_calendar' table to 'f' for matching
 rows. Prior to invoking this procedure, the system should validate and confirm
 the booking request.
 
-#### Parameters:
+### Parameters:
 
 -   `listing_id`: The ID of the listing for which the booking is made.
 -   `start_date`: The start date of the booking.
 -   `end_date`: The end date of the booking.
 
-### 4. Procedure: `reset_database`
+## 4. Procedure: `reset_database`
 
-#### Purpose:
+### Purpose:
 
 The `reset_database` procedure is responsible for resetting the entire database
 to its initial state. This procedure is normally & only called when doing the
@@ -665,25 +723,23 @@ data migration functions. **This is a critical operation that should be executed
 with caution. The system should ensure that all data is appropriately backed up
 and conduct necessary checks before proceeding.**
 
-### 5. Procedure: `update_price_and_availability`
+## 5. Procedure: `update_price_and_availability`
 
-#### Purpose:
+### Purpose:
 
 The `update_price_and_availability` procedure automates the process of updating
 the 'price' and 'has_availability' columns in the 'nz_listings_stay_stats'
 table. The system should trigger this procedure based on predefined schedules
 and perform relevant checks to ensure data accuracy.
 
-### 6. Procedure: `update_stay_stats`
+## 6. Procedure: `update_stay_stats`
 
-#### Purpose:
+### Purpose:
 
 The `update_stay_stats` procedure is responsible for updating various columns in
 the 'nz_listings_stay_stats' table. It aggregates data from the 'nz_calendar'
 table. The system should schedule this procedure as needed and validate the data
 it processes.
-
----
 
 In summary, these stored procedures and functions are designed to be executed
 automatically by the system. However, the system's responsibility goes beyond
@@ -691,7 +747,14 @@ just calling these functions. It should perform quality checks, data validation,
 and ensure that the right conditions are met before invoking these operations to
 maintain the integrity of our database and booking management processes.
 
-## Special Thanks
+## 7. [create_tables.sql](./sql/create_tables.sql) sql file
+
+This SQL script creates several tables for an Airbnb-like platform in New
+Zealand.
+
+[BACK TO Table of Contents](#table-of-contents)
+
+# Special Thanks
 
 I would like to express my deepest gratitude to
 [Dr. Nigel Stanger](nigel.stanger@otago.ac.nz) and
@@ -704,11 +767,17 @@ Thank you for your outstanding support throughout this project. It has been an
 honor to work with you, and I am grateful for the impact you've had on my
 education and growth.
 
-## Authors
+[BACK TO Table of Contents](#table-of-contents)
+
+# Authors
 
 **Shangwen (Chris) Yang**
 
-## Version History
+[BACK TO Table of Contents](#table-of-contents)
+
+# Version History
 
 -   0.1
     -   Initial Release
+
+[BACK TO Table of Contents](#table-of-contents)
