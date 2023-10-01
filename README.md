@@ -691,6 +691,19 @@ just calling these functions. It should perform quality checks, data validation,
 and ensure that the right conditions are met before invoking these operations to
 maintain the integrity of our database and booking management processes.
 
+## Special Thanks
+
+I would like to express my deepest gratitude to
+[Dr. Nigel Stanger](nigel.stanger@otago.ac.nz) and
+[Professor Stephen Cranefield](stephen.cranefield@otago.ac.nz) from the
+University of Otago. Your unwavering support, expert guidance, and mentorship
+have been instrumental in making this learning journey a truly enriching and
+fulfilling experience.
+
+Thank you for your outstanding support throughout this project. It has been an
+honor to work with you, and I am grateful for the impact you've had on my
+education and growth.
+
 ## Authors
 
 **Shangwen (Chris) Yang**
