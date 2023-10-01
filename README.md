@@ -198,7 +198,8 @@ To execute the program, follow these steps:
     -   Activating the virtual environment isolates the project's dependencies,
         ensuring they don't conflict with other Python packages on your system.
 
-3.  **Open the `data_loader.ipynb` Jupyter notebook to run the Program**:
+3.  **Open the [data_loader.ipynb](./data_loader.ipynb) Jupyter notebook to run
+    the Program**:
 
     -   Open Jupyter Notebook by running:
         ```
@@ -237,13 +238,202 @@ By following these steps, you will be able to run the program successfully and
 execute the specified functionality, whether it's data extraction, analysis, or
 any other task associated with the program.
 
-## Help
+## Source Data
 
-Any advise for common problems or issues.
+In this project, we utilize several CSV source data files, each providing
+distinct and valuable information:
 
-```
-command to run if program contains helper info
-```
+1. **Listing Property Information**:
+
+    - This section encompasses a wide range of data about the listing
+      properties, including:
+        - Property descriptions
+        - Property images
+        - The number of bedrooms, bathrooms, and beds
+        - Regional details related to each listing
+        - Host information, such as host names, hosting tenure, basic details,
+          and host locations
+        - Various statistical data, such as:
+            - Last search timestamps
+            - Pricing information
+            - Minimum and maximum nights for bookings
+            - Minimum and maximum values for minimum nights
+            - Minimum and maximum values for maximum nights
+            - Average minimum nights
+            - Average maximum nights
+
+2. **Host Information**:
+
+    - This category provides key metrics and details about property hosts,
+      including:
+        - Host response time
+        - Host response rate
+        - Host acceptance rate
+        - Host superhost status
+        - Host listings count
+        - Host total listings count
+
+3. **Listing Review Information**:
+    - This section contains comprehensive data related to guest reviews for each
+      listing property. It includes information such as:
+        - The number of reviews received
+        - Timestamps for the last scrape, first review, and last review
+        - Review scores for various aspects of the listing, including accuracy,
+          cleanliness, check-in, communication, location, and overall rating.
+
+Please note that
+[calendar.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/calendar.csv.gz)
+and
+[reviews.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/reviews.csv.gz)
+require minimal data structure manipulation, as they primarily serve as records
+of availability and reviews. In contrast,
+[listings.csv.gz](http://data.insideairbnb.com/new-zealand/2023-09-02/data/listings.csv.gz)
+is a comprehensive dataset that provides a wealth of information related to
+listing properties and hosts, making it a central focus of this project.
+
+## Destination Database Table Structure
+
+The database comprises several tables, each designed to store specific
+categories of data related to Airbnb listings, hosts, reviews, and other
+relevant details. `nz_host_detail`, `nz_region_parent `,`nz_listings `,
+`nz_reviews` and `nz_calendar ` tables are the main systems tables and they are
+created under normalized relationship.
+
+`nz_host_stats`,`nz_listings_review_stats` and `nz_listings_stay_stats` are
+analytical tables which the do not have any relationship to each other or other
+system tables, and they are update either periodically or manually updated by
+system administrators or users.
+
+Below is the graph showing table relations:
+
+![sql table relations](./sql/database_graph.png)
+
+This database is meticulously structured to store a wide range of data related
+to Airbnb listings, hosts, reviews, and geographical regions. Below, we provide
+a comprehensive overview of the tables, their attributes, and the relationships
+that connect them:
+
+### nz_host_detail Table
+
+-   **Description**: This table captures detailed information about Airbnb
+    hosts.
+-   **Attributes**:
+    -   `host_id`: A unique identifier for each host.
+    -   `host_url`: The URL associated with the host.
+    -   `host_name`: The name of the host.
+    -   `host_since`: The date when the host joined Airbnb.
+    -   `host_location`: The location of the host.
+    -   `host_about`: A brief description of the host.
+    -   `host_thumbnail_url` and `host_picture_url`: URLs to the host's profile
+        pictures.
+    -   `host_neighbourhood`: The neighborhood of the host.
+-   **Relationships**:
+    -   None.
+
+### nz_host_stats Table
+
+-   **Description**: This table contains statistical metrics and details about
+    Airbnb hosts.
+-   **Attributes**:
+    -   `host_id`: A unique identifier for each host.
+    -   `host_response_time`: The response time of the host.
+    -   `host_response_rate`: The response rate of the host.
+    -   `host_acceptance_rate`: The acceptance rate of booking requests by the
+        host.
+    -   `host_is_superhost`: Indicates if the host has "superhost" status.
+    -   `host_listings_count`: The count of listings hosted by the host.
+    -   `host_total_listings_count`: The total count of listings hosted by the
+        host.
+    -   `host_verifications`: Methods used to verify the host's identity.
+    -   `host_has_profile_pic`: Indicates whether the host has a profile
+        picture.
+    -   `host_identity_verified`: Indicates whether the host's identity has been
+        verified.
+-   **Relationships**:
+    -   None.
+
+### nz_listings_review_stats Table
+
+-   **Description**: This table contains statistical data related to guest
+    reviews for Airbnb listings.
+-   **Attributes**:
+    -   `id`: A unique identifier for each review record.
+    -   `number_of_reviews`: The total number of reviews for a listing.
+    -   `last_scraped`: The date when the last scrape of review data occurred.
+    -   `first_review`: The date of the first review for the listing.
+    -   `last_review`: The date of the most recent review.
+    -   `review_scores_rating`: The overall rating score based on guest reviews.
+    -   `review_scores_accuracy`, `review_scores_cleanliness`,
+        `review_scores_checkin`, `review_scores_communication`,
+        `review_scores_location`, and `review_scores_value`: Scores for specific
+        aspects of the listing as rated by guests.
+    -   `reviews_per_month`: The average number of reviews received per month.
+-   **Relationships**:
+    -   None.
+
+### nz_listings_stay_stats Table
+
+-   **Description**: This table stores statistical details related to stays at
+    Airbnb listings.
+-   **Attributes**:
+    -   `id`: A unique identifier for each stay record.
+    -   `last_searched`: Timestamp indicating the last search related to this
+        listing.
+    -   `price`: The price of the listing.
+    -   `minimum_nights`: The minimum number of nights required for booking.
+    -   `maximum_nights`: The maximum number of nights allowed for booking.
+    -   `minimum_minimum_nights` and `maximum_minimum_nights`: Minimum and
+        maximum values for the minimum number of nights required.
+    -   `minimum_maximum_nights` and `maximum_maximum_nights`: Minimum and
+        maximum values for the maximum number of nights allowed.
+    -   `minimum_nights_avg_ntm` and `maximum_nights_avg_ntm`: Average minimum
+        and maximum nights for stays.
+    -   `has_availability`: Indicates availability status.
+    -   `last_scraped`: Timestamp indicating the last data scrape related to
+        this listing.
+-   **Relationships**:
+    -   None.
+
+### nz_region_parent Table
+
+-   **Description**: This table records information about parent geographical
+    regions.
+-   **Attributes**:
+    -   `region_parent_id`: A unique identifier for each region parent.
+    -   `region_parent_name`: The name of the region parent.
+-   **Relationships**:
+    -   None.
+
+### nz_region Table
+
+-   **Description**: This table stores data about geographical regions and their
+    parent relationships.
+-   **Attributes**:
+    -   `region_id`: A unique identifier for each geographical region.
+    -   `region_name`: The name of the geographical region.
+    -   `region_parent_id`: A reference to the parent region to which this
+        region belongs.
+-   **Relationships**:
+    -   The `region_parent_id` field establishes a foreign key relationship with
+        the `nz_region_parent` table, connecting child regions to their parent
+        regions.
+
+### nz_listings Table
+
+-   **Description**: This table contains comprehensive information about Airbnb
+    listing properties.
+-   **Attributes**:
+    -   `id`: A unique identifier for each listing.
+    -   `listing_url`: The URL associated with the listing.
+    -   `scrape_id`: An identifier for the data scrape.
+    -   `name`: The name of the listing.
+    -   `description`: A detailed description of the listing.
+    -   `neighborhood_overview`: An overview of the neighborhood where the
+        listing is located.
+
+These database tables collectively form the structured foundation for organizing
+and accessing data related to Airbnb listings, hosts, reviews, and geographical
+regions.
 
 ## Authors
 

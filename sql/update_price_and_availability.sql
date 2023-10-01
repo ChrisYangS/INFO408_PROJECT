@@ -1,3 +1,6 @@
+/*
+ This stored procedure updates the price and availability of listings in the nz_listings_stay_stats table based on the most recent data in the nz_calendar table. It retrieves the most recent price, availability, minimum nights, and maximum nights for each listing from the nz_calendar table and updates the corresponding rows in the nz_listings_stay_stats table. The number of rows affected by the update is printed as a notice. If an error occurs during the update, the error message is printed as a notice. A completion message is printed when the procedure finishes successfully.
+ */
 CREATE OR REPLACE PROCEDURE update_price_and_availability() LANGUAGE plpgsql AS $procedure$
 DECLARE rows_affected INT;
 BEGIN BEGIN -- Your original SQL code here

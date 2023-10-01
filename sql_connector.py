@@ -5,6 +5,12 @@ from sqlalchemy.engine import URL
 
 
 def connect_database():
+    """
+    Connects to a PostgreSQL database using the credentials specified in the config file.
+
+    Returns:
+    conn: a connection object to the PostgreSQL database
+    """
     try:
         url = URL.create(
             drivername="postgresql",

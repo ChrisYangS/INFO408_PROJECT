@@ -1,7 +1,22 @@
--- yansh877.nz_host_detail definition
+/*
+ This SQL script creates several tables for a database related to Airbnb listings in New Zealand. The tables include:
+ 
+ - nz_host_detail: contains information about the hosts of the listings.
+ - yansh877.nz_host_stats: contains statistics about the hosts of the listings.
+ - nz_listings_review_stats: contains review statistics for the listings.
+ - nz_listings_stay_stats: contains stay statistics for the listings.
+ - nz_region_parent: contains information about the parent regions of the listings.
+ - nz_region: contains information about the regions of the listings.
+ - nz_listings: contains information about the listings.
+ - nz_reviews: contains reviews for the listings.
+ - nz_calendar: contains availability and pricing information for the listings.
+ 
+ Each table has its own set of columns and constraints, as specified in the script. The script also drops any existing tables with the same names before creating the new ones.
+ */
+-- nz_host_detail definition
 -- Drop table
--- DROP TABLE yansh877.nz_host_detail;
-CREATE TABLE yansh877.nz_host_detail (
+-- DROP TABLE nz_host_detail;
+CREATE TABLE nz_host_detail (
     host_id int8 NOT NULL,
     host_url text NULL,
     host_name text NULL,
@@ -14,7 +29,7 @@ CREATE TABLE yansh877.nz_host_detail (
     CONSTRAINT nz_host_detail_pkey PRIMARY KEY (host_id),
     CONSTRAINT nz_host_un UNIQUE (host_id)
 );
--- yansh877.nz_host_stats definition
+-- nz_host_stats definition
 -- Drop table
 -- DROP TABLE yansh877.nz_host_stats;
 CREATE TABLE yansh877.nz_host_stats (
@@ -31,11 +46,11 @@ CREATE TABLE yansh877.nz_host_stats (
     CONSTRAINT nz_host_stats_pkey PRIMARY KEY (host_id),
     CONSTRAINT nz_host_stats_un UNIQUE (host_id)
 );
-CREATE INDEX index_host_stats_id ON yansh877.nz_host_stats USING btree (host_id);
--- yansh877.nz_listings_review_stats definition
+CREATE INDEX index_host_stats_id ON nz_host_stats USING btree (host_id);
+-- nz_listings_review_stats definition
 -- Drop table
--- DROP TABLE yansh877.nz_listings_review_stats;
-CREATE TABLE yansh877.nz_listings_review_stats (
+-- DROP TABLE nz_listings_review_stats;
+CREATE TABLE nz_listings_review_stats (
     id int8 NOT NULL,
     number_of_reviews int8 NULL,
     last_scraped text NULL,
@@ -52,10 +67,10 @@ CREATE TABLE yansh877.nz_listings_review_stats (
     CONSTRAINT nz_listings_review_stats_pkey PRIMARY KEY (id),
     CONSTRAINT review_stats_un UNIQUE (id)
 );
--- yansh877.nz_listings_stay_stats definition
+-- nz_listings_stay_stats definition
 -- Drop table
--- DROP TABLE yansh877.nz_listings_stay_stats;
-CREATE TABLE yansh877.nz_listings_stay_stats (
+-- DROP TABLE nz_listings_stay_stats;
+CREATE TABLE nz_listings_stay_stats (
     id int8 NOT NULL,
     last_searched text NULL,
     price text NULL,
@@ -72,31 +87,31 @@ CREATE TABLE yansh877.nz_listings_stay_stats (
     CONSTRAINT nz_listings_stay_stats_pkey PRIMARY KEY (id),
     CONSTRAINT stay_stats_un UNIQUE (id)
 );
--- yansh877.nz_region_parent definition
+-- nz_region_parent definition
 -- Drop table
--- DROP TABLE yansh877.nz_region_parent;
-CREATE TABLE yansh877.nz_region_parent (
+-- DROP TABLE nz_region_parent;
+CREATE TABLE nz_region_parent (
     region_parent_id int8 NOT NULL,
     region_parent_name text NULL,
     CONSTRAINT nregion_parent_un UNIQUE (region_parent_id),
     CONSTRAINT nz_region_parent_pkey PRIMARY KEY (region_parent_id)
 );
--- yansh877.nz_region definition
+-- nz_region definition
 -- Drop table
--- DROP TABLE yansh877.nz_region;
-CREATE TABLE yansh877.nz_region (
+-- DROP TABLE nz_region;
+CREATE TABLE nz_region (
     region_id int8 NOT NULL,
     region_name text NULL,
     region_parent_id int8 NULL,
     CONSTRAINT nz_region_pkey PRIMARY KEY (region_id),
     CONSTRAINT nz_region_un UNIQUE (region_id),
-    CONSTRAINT fk_region_parent_id FOREIGN KEY (region_parent_id) REFERENCES yansh877.nz_region_parent(region_parent_id)
+    CONSTRAINT fk_region_parent_id FOREIGN KEY (region_parent_id) REFERENCES nz_region_parent(region_parent_id)
 );
-CREATE INDEX index_region_id ON yansh877.nz_region USING btree (region_id);
--- yansh877.nz_listings definition
+CREATE INDEX index_region_id ON nz_region USING btree (region_id);
+-- nz_listings definition
 -- Drop table
--- DROP TABLE yansh877.nz_listings;
-CREATE TABLE yansh877.nz_listings (
+-- DROP TABLE nz_listings;
+CREATE TABLE nz_listings (
     id int8 NOT NULL,
     listing_url text NULL,
     scrape_id int8 NULL,
@@ -120,13 +135,13 @@ CREATE TABLE yansh877.nz_listings (
     region_id int8 NULL,
     CONSTRAINT listing_un UNIQUE (id),
     CONSTRAINT nz_listings_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_host_id FOREIGN KEY (host_id) REFERENCES yansh877.nz_host_detail(host_id),
-    CONSTRAINT fk_region_id FOREIGN KEY (region_id) REFERENCES yansh877.nz_region(region_id)
+    CONSTRAINT fk_host_id FOREIGN KEY (host_id) REFERENCES nz_host_detail(host_id),
+    CONSTRAINT fk_region_id FOREIGN KEY (region_id) REFERENCES nz_region(region_id)
 );
--- yansh877.nz_reviews definition
+-- nz_reviews definition
 -- Drop table
--- DROP TABLE yansh877.nz_reviews;
-CREATE TABLE yansh877.nz_reviews (
+-- DROP TABLE nz_reviews;
+CREATE TABLE nz_reviews (
     listing_id int8 NULL,
     id int8 NOT NULL,
     "date" text NULL,
@@ -135,12 +150,12 @@ CREATE TABLE yansh877.nz_reviews (
     "comments" text NULL,
     CONSTRAINT list_review_un UNIQUE (id),
     CONSTRAINT nz_reviews_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_review_id FOREIGN KEY (listing_id) REFERENCES yansh877.nz_listings(id)
+    CONSTRAINT fk_review_id FOREIGN KEY (listing_id) REFERENCES nz_listings(id)
 );
--- yansh877.nz_calendar definition
+-- nz_calendar definition
 -- Drop table
--- DROP TABLE yansh877.nz_calendar;
-CREATE TABLE yansh877.nz_calendar (
+-- DROP TABLE nz_calendar;
+CREATE TABLE nz_calendar (
     listing_id int8 NOT NULL,
     "date" text NOT NULL,
     available text NULL,
@@ -150,5 +165,5 @@ CREATE TABLE yansh877.nz_calendar (
     maximum_nights float8 NULL,
     CONSTRAINT calendar_un UNIQUE (listing_id, date),
     CONSTRAINT nz_calendar_pkey PRIMARY KEY (listing_id, date),
-    CONSTRAINT fk_calendar_id FOREIGN KEY (listing_id) REFERENCES yansh877.nz_listings(id)
+    CONSTRAINT fk_calendar_id FOREIGN KEY (listing_id) REFERENCES nz_listings(id)
 );
